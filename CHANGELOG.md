@@ -1,3 +1,7 @@
+## 1.0.3
+
+- Fixed `gifskiPath`
+
 ## 1.0.2
 
 - Updated `GifskiCommandOptions.quality` type to `number`

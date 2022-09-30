@@ -8,6 +8,7 @@ import {
 import * as os from "os";
 import * as path from "path";
 import events from "events";
+import * as fs from "fs";
 
 const platform = process.env["npm_config_platform"] || os.platform();
 
@@ -33,6 +34,14 @@ if (!platformPath) {
 export const gifskiPath = path.join(
   __dirname, '..', 'node_modules', 'gifski', 'bin', platformPath
 );
+if (!fs.existsSync(gifskiPath)) {
+  path.join(
+    __dirname, '..', '..', '..', 'node_modules', 'gifski', 'bin', platformPath
+  );
+}
+if (!fs.existsSync(gifskiPath)) {
+  throw Error(`gifski executable not found in ${gifskiPath}.`);
+}
 
 /**
  * gifski command options.
