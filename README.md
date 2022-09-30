@@ -91,8 +91,6 @@ gifski-command -Q 100 -o './test/video.gif' './test/**/video.mp4.frame*.png'
 gifski-command -o - './test/**/video.mp4.frame*.png' > './test/video.gif'
 ```
 
-To use the 
-
 This code snippet shows how to put into action `gifski-command` to convert video frames into a high quality GIF using the [gifski](https://github.com/ImageOptim/gifski) encoder.
 
 ## Contributors
