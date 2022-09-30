@@ -1,3 +1,7 @@
+## 1.0.4
+
+- Fixed `gifskiPath`
+
 ## 1.0.3
 
 - Fixed `gifskiPath`

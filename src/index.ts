@@ -28,20 +28,22 @@ if (!platformPath) {
   throw Error(`gifski executable not found for platform ${platform}.`);
 }
 
-/**
- * gifski executable path.
- */
-export const gifskiPath = path.join(
+let _gifskiPath = path.join(
   __dirname, '..', 'node_modules', 'gifski', 'bin', platformPath
 );
-if (!fs.existsSync(gifskiPath)) {
-  path.join(
+if (!fs.existsSync(_gifskiPath)) {
+  _gifskiPath = path.join(
     __dirname, '..', '..', '..', 'node_modules', 'gifski', 'bin', platformPath
   );
 }
-if (!fs.existsSync(gifskiPath)) {
-  throw Error(`gifski executable not found in ${gifskiPath}.`);
+if (!fs.existsSync(_gifskiPath)) {
+  throw Error(`gifski executable not found in ${_gifskiPath}.`);
 }
+
+/**
+ * gifski executable path.
+ */
+export const gifskiPath = _gifskiPath;
 
 /**
  * gifski command options.

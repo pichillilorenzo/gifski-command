@@ -1,6 +1,6 @@
 {
   "name": "gifski-command",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Node.js module for gifski GIF encoder CLI",
   "author": {
     "name": "Lorenzo Pichilli",
