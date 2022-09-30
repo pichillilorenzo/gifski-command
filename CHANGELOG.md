@@ -1,3 +1,7 @@
+## 1.0.5
+
+- Updated `tsconfig.json` to maintain comments.
+
 ## 1.0.4
 
 - Fixed `gifskiPath`
