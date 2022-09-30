@@ -3,8 +3,6 @@
 /// <reference types="node" />
 import { SpawnOptionsWithoutStdio, SpawnSyncOptionsWithBufferEncoding } from "child_process";
 import events from "events";
-declare type Enumerate<N extends number, Acc extends number[] = []> = Acc['length'] extends N ? Acc[number] : Enumerate<N, [...Acc, Acc['length']]>;
-declare type Range<F extends number, T extends number> = Exclude<Enumerate<T>, Enumerate<F>>;
 export declare const gifskiPath: string;
 export interface GifskiCommandOptions {
     output: string;
@@ -12,7 +10,7 @@ export interface GifskiCommandOptions {
     fps?: number;
     fast?: boolean;
     extra?: boolean;
-    quality?: Range<1, 101>;
+    quality?: number;
     width?: number;
     height?: number;
     noSort?: boolean;
@@ -46,4 +44,3 @@ export declare class GifskiCommand extends events.EventEmitter {
         stderr?: string | Buffer;
     };
 }
-export {};

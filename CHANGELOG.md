@@ -1,3 +1,7 @@
+## 1.0.2
+
+- Updated `GifskiCommandOptions.quality` type to `number`
+
 ## 1.0.1
 
 - Updated README

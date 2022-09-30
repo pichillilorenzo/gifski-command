@@ -9,12 +9,6 @@ import * as os from "os";
 import * as path from "path";
 import events from "events";
 
-type Enumerate<N extends number, Acc extends number[] = []> = Acc['length'] extends N
-  ? Acc[number]
-  : Enumerate<N, [...Acc, Acc['length']]>
-
-type Range<F extends number, T extends number> = Exclude<Enumerate<T>, Enumerate<F>>
-
 const platform = process.env["npm_config_platform"] || os.platform();
 
 let platformPath = '';
@@ -72,7 +66,7 @@ export interface GifskiCommandOptions {
   /**
    * <1-100>. Lower quality may give smaller file [default: 90].
    */
-  quality?: Range<1, 101>;
+  quality?: number;
 
   /**
    * <px>. Maximum width. By default anims are limited to about 800x600.
