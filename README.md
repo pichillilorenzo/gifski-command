@@ -59,7 +59,7 @@ Example:
   gifski-command -o - './test/**/video.mp4.frame*.png' > './test/video.gif'
 
 Arguments:
-  pattern                Glob pattern of PNG image files. Surround with quotes to define the glob pattern (example './test/**/*.png').
+  pattern                Glob pattern of PNG image files. Surround the glob pattern with quotes (example './test/**/*.png').
 
 Options:
   -o, --output <a.gif>   Destination file to write to; "-" means stdout
