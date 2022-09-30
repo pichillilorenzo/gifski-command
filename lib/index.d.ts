@@ -16,9 +16,9 @@ export interface GifskiCommandOptions {
      */
     output: string;
     /**
-     * PNG image files.
+     * Glob pattern or list of PNG image files.
      */
-    frames: string[];
+    frames: string | string[];
     /**
      * Frame rate of animation. This means the speed, as all frames are kept. [default: 20].
      */

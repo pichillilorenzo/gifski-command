@@ -41,6 +41,16 @@ describe('gifski-command', () => {
     expect(result.err).toBeUndefined();
   });
 
+  test('basic usage with glob pattern frames', async () => {
+    const command = new GifskiCommand({
+      output,
+      frames: path.join(__dirname, '**', 'video.mp4.frame*.png')
+    });
+    const result = await command.run();
+    expect(fs.existsSync(output)).toBeTruthy();
+    expect(result.err).toBeUndefined();
+  });
+
   test('basic usage error', async () => {
     const command = new GifskiCommand({
       output,

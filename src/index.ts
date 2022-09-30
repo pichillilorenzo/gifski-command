@@ -9,6 +9,7 @@ import * as os from "os";
 import * as path from "path";
 import events from "events";
 import * as fs from "fs";
+import {glob} from "glob";
 
 const platform = process.env["npm_config_platform"] || os.platform();
 
@@ -55,9 +56,9 @@ export interface GifskiCommandOptions {
   output: string;
 
   /**
-   * PNG image files.
+   * Glob pattern or list of PNG image files.
    */
-  frames: string[];
+  frames: string | string[];
 
   /**
    * Frame rate of animation. This means the speed, as all frames are kept. [default: 20].
@@ -221,10 +222,17 @@ export class GifskiCommand extends events.EventEmitter {
       );
     }
 
+    let frames = this.options.frames;
+    if (typeof frames === 'string') {
+      frames = glob.sync(frames, {
+        absolute: true
+      });
+    }
+
     processArgs.push(
       '-o',
       this.options.output,
-      ...this.options.frames
+      ...frames
     );
     return processArgs;
   }

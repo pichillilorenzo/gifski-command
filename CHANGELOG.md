@@ -1,3 +1,7 @@
+## 1.0.6
+
+- Added glob pattern support to `GifskiCommandOptions.frames` property.
+
 ## 1.0.5
 
 - Updated `tsconfig.json` to maintain comments.
