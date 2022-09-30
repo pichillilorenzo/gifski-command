@@ -29,11 +29,16 @@ npm install gifski-command --save
 yarn add gifski-command
 ```
 
-## Library Usage Example
+## Library Usage
+
+API Reference available at [https://pichillilorenzo.github.io/gifski-command/](https://pichillilorenzo.github.io/gifski-command/).
 
 ```javascript
 import * as path from 'path';
 import {GifskiCommand} from 'gifski-command';
+// or
+const path = require('path');
+const {GifskiCommand} = require('gifski-command');
 
 const command = new GifskiCommand({
   output: path.join(__dirname, 'test', 'video.gif'),
@@ -48,7 +53,7 @@ const result = await command.run();
 
 ## CLI Usage
 
-- `<pattern>` represents a [glob pattern](https://www.npmjs.com/package/glob) used to specify PNG frames used by [gifski](https://github.com/ImageOptim/gifski). Surround with quotes to define the glob pattern.
+- `<pattern>` represents a [glob pattern](https://www.npmjs.com/package/glob) used to specify PNG frames used by [gifski](https://github.com/ImageOptim/gifski). Surround the glob pattern with quotes (example `'./test/**/*.png'`).
 - `[options]` are the same as the [gifski](https://github.com/ImageOptim/gifski) CLI options.
 
 ```
@@ -87,8 +92,6 @@ and then make the GIF from the frames:
 
 ```bash
 gifski-command -Q 100 -o './test/video.gif' './test/**/video.mp4.frame*.png'
-
-gifski-command -o - './test/**/video.mp4.frame*.png' > './test/video.gif'
 ```
 
 This code snippet shows how to put into action `gifski-command` to convert video frames into a high quality GIF using the [gifski](https://github.com/ImageOptim/gifski) encoder.

@@ -1,4 +1,10 @@
-import {ChildProcessWithoutNullStreams, spawn, SpawnOptionsWithoutStdio} from "child_process";
+import {
+  ChildProcessWithoutNullStreams,
+  spawn,
+  SpawnOptionsWithoutStdio,
+  spawnSync,
+  SpawnSyncOptionsWithBufferEncoding, SpawnSyncReturns
+} from "child_process";
 import * as os from "os";
 import * as path from "path";
 import events from "events";
@@ -139,7 +145,7 @@ export declare interface GifskiCommand {
    * @param event
    * @param listener
    */
-  on(event: 'end', listener: (err?: Error, stdout?: string | Buffer, stderr?: string) => void): this;
+  on(event: 'end', listener: (err?: Error, stdout?: string | Buffer, stderr?: string | Buffer) => void): this;
 
   /**
    * Event called when gifski command emit an error.
@@ -147,7 +153,7 @@ export declare interface GifskiCommand {
    * @param event
    * @param listener
    */
-  on(event: 'error', listener: (err?: Error, stdout?: string | Buffer, stderr?: string) => void): this;
+  on(event: 'error', listener: (err?: Error, stdout?: string | Buffer, stderr?: string | Buffer) => void): this;
 }
 
 /**
@@ -223,7 +229,7 @@ export class GifskiCommand extends events.EventEmitter {
    *
    * @param options
    */
-  async run(options?: SpawnOptionsWithoutStdio): Promise<{err?: Error, stdout?: string | Buffer, stderr?: string}> {
+  async run(options?: SpawnOptionsWithoutStdio): Promise<{ err?: Error, stdout?: string | Buffer, stderr?: string | Buffer }> {
     options = {
       shell: true,
       ...options
@@ -247,9 +253,11 @@ export class GifskiCommand extends events.EventEmitter {
         }
 
         if (processExited && stdoutClosed && stderrClosed) {
-          const stdout = this.options.output !== '-' ? stdoutData.join('\n') : Buffer.concat(stdoutData as Buffer[]);
-          const stderr = stderrData.join('\n');
-          if (exitError && exitError.message.match(/gifski exited with code/)) {
+          const stdout = stdoutData.length > 0 ?
+            (this.options.output !== '-' ? stdoutData.join('\n') : Buffer.concat(stdoutData as Buffer[])) :
+            undefined;
+          const stderr = stderrData.length > 0 ? stderrData.join('\n') : undefined;
+          if (exitError && exitError.message.match(/gifski exited with code/) && stderr) {
             // Add gifski error message
             exitError.message += ': ' + stderr;
           }
@@ -266,10 +274,12 @@ export class GifskiCommand extends events.EventEmitter {
 
       gifskiProcess.stdout.on('data', chunk => {
         if (this.options.output !== '-') {
-          if (maxLines !== 0 && stdoutData.length === maxLines) {
-            stdoutData.shift();
+          if (!this.options.quiet) {
+            if (maxLines !== 0 && stdoutData.length === maxLines) {
+              stdoutData.shift();
+            }
+            stdoutData.push(chunk.toString());
           }
-          stdoutData.push(chunk.toString());
         } else {
           stdoutData.push(chunk);
         }
@@ -309,8 +319,10 @@ export class GifskiCommand extends events.EventEmitter {
       });
 
       gifskiProcess.on('error', err => {
-        const stdout = this.options.output !== '-' ? stdoutData.join('\n') : Buffer.concat(stdoutData as Buffer[]);
-        const stderr = stderrData.join('\n');
+        const stdout = stdoutData.length > 0 ?
+          (this.options.output !== '-' ? stdoutData.join('\n') : Buffer.concat(stdoutData as Buffer[])) :
+          undefined;
+        const stderr = stderrData.length > 0 ? stderrData.join('\n') : undefined;
 
         this.emit('error', err, stdout, stderr);
       });
@@ -329,5 +341,45 @@ export class GifskiCommand extends events.EventEmitter {
         gifskiProcess = null;
       });
     });
+  }
+
+  /**
+   * Run gifski command in sync way.
+   *
+   * @param options
+   */
+  runSync(options?: SpawnSyncOptionsWithBufferEncoding): { err?: Error, stdout?: string | Buffer, stderr?: string | Buffer } {
+    options = {
+      shell: true,
+      stdio: 'inherit',
+      ...options
+    };
+
+    const result: SpawnSyncReturns<string | Buffer> = spawnSync(
+      `${gifskiPath}`,
+      this._buildSpawnArgs(),
+      options
+    );
+
+    let err = result.error;
+    if (result.signal && result.signal !== 'SIGTERM') {
+      if (err) {
+        err.message += `: gifski was killed with signal ${result.signal}`;
+      } else {
+        err = new Error(`gifski was killed with signal ${result.signal}`);
+      }
+    } else if (result.status) {
+      if (err) {
+        err.message += `: gifski exited with code ${result.status}`;
+      } else {
+        err = new Error(`gifski exited with code ${result.status}`);
+      }
+    }
+
+    return {
+      err,
+      stdout: result.stdout,
+      stderr: result.stderr
+    };
   }
 }

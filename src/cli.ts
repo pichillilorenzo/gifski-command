@@ -9,7 +9,7 @@ const program = new Command();
 const Bar = require('progress-barjs');
 
 function log(options: GifskiCommandOptions, ...args: any[]) {
-  if (options.output !== '-') {
+  if (options.output !== '-' && !options.quiet) {
     console.log(...args);
   }
 }
@@ -29,18 +29,17 @@ async function generateGIF(pattern: string) {
 
     log(options, `${files.length} PNG image file${files.length !== 1 ? 's' : ''} found!`);
 
-    const bar = Bar({
-      label: `Convert to .gif`,
-      info: 'Processing',
-      total: files.length,
-    });
-
     const command = new GifskiCommand({
       ...options,
       frames: files
     });
 
-    if (options.output !== '-') {
+    if (options.output !== '-' && !options.quiet) {
+      const bar = Bar({
+        label: `Convert to .gif`,
+        info: 'Processing',
+        total: files.length,
+      });
       let previousCurrentFrame = 0;
       command.on('progress', progress => {
         bar.tickChunk(progress.currentFrame - previousCurrentFrame);
@@ -58,7 +57,7 @@ async function generateGIF(pattern: string) {
     log(options, `🎉 ${files.length} PNG image file${files.length !== 1 ? 's have' : 'had'} been converted with success. 🎉`);
     log(options, `GIF saved at: ${options.output}`);
 
-    if (stdout instanceof Buffer) {
+    if (options.output === '-' && stdout instanceof Buffer) {
       process.stdout.write(stdout as Buffer);
     }
   } else {

@@ -1,6 +1,6 @@
 {
   "name": "gifski-command",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Node.js module for gifski GIF encoder CLI",
   "author": {
     "name": "Lorenzo Pichilli",
@@ -49,10 +49,10 @@
     "clean": "tsc --build --clean",
     "watch": "tsc --watch",
     "postbuild": "minimize-js ./lib",
-    "generate-test-frames": "rimraf './test/**/video.mp4.frame*.png' && ffmpeg -i ./test/video.mp4 ./test/video.mp4.frame%04d.png",
-    "test": "rimraf ./coverage && npm run generate-test-frames && jest --coverage && rimraf './test/**/video.mp4.frame*.png'",
+    "generate-test-frames": "rimraf './test/**/*.png' && ffmpeg -i ./test/video.mp4 ./test/video.mp4.frame%04d.png",
+    "test": "rimraf ./coverage && npm run generate-test-frames && jest --coverage && rimraf './test/**/*.png'",
     "coverage": "coveralls < coverage/lcov.info",
-    "prepublish": "npm run test && npm run coverage"
+    "prepare": "npm run build && npm run test && npm run coverage"
   },
   "dependencies": {
     "commander": "^8.3.0",
