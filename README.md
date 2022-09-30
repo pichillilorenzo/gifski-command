@@ -59,7 +59,7 @@ const result = await command.run();
 ```
 Usage: gifski-command [options] <pattern>
 
-Example: 
+Examples: 
   gifski-command -Q 100 -o './test/video.gif' './test/**/video.mp4.frame*.png'
   gifski-command -o - './test/**/video.mp4.frame*.png' > './test/video.gif'
 

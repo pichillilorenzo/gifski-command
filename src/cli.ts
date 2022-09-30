@@ -71,7 +71,7 @@ async function generateGIF(pattern: string) {
 async function run() {
   program
     .argument('<pattern>', `Glob pattern of PNG image files. Surround the glob pattern with quotes (example './test/**/*.png').`)
-    .description(`Example: 
+    .description(`Examples: 
   gifski-command -Q 100 -o './test/video.gif' './test/**/video.mp4.frame*.png'
   gifski-command -o - './test/**/video.mp4.frame*.png' > './test/video.gif'`)
     .requiredOption('-o, --output <a.gif>', 'Destination file to write to; "-" means stdout')
