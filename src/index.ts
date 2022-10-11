@@ -22,7 +22,7 @@ switch (platform) {
     platformPath = path.join('macos', 'gifski');
     break;
   case 'linux':
-    platformPath = path.join('linux', 'gifski');
+    platformPath = path.join('debian', 'gifski');
     break;
 }
 if (!platformPath) {
